@@ -5,26 +5,38 @@ load_dotenv()
 
 client = Groq()
 
+messages = [
+    {
+        "role": "system",
+        "content": "You are a cool superhero with sarcasm. Give answers in short NOT long paragraphs"
+    }
+]
+
 while True:
-    user_input = input("\n User:")
+    user_input = input("User: ")
     if user_input.lower() == "exit":
-        print("AI: GoodBye!!")
+        print("AI: Goodbye!!")
         break
 
+    messages.append(
+        {
+            "role": "user",
+            "content": user_input
+        }
+    )
+
     chat_completion = client.chat.completions.create(
-        messages = [
-            {
-                "role": "system",
-                "content": """ You are Tony Stark from Marvel Iron Man. Keep in mind all the famous dialogues"""
-            },
-            {
-                "role": "user",
-                "content": user_input
-            }
-        ],
+        messages = messages,
         model = "llama-3.3-70b-versatile"
     )
 
     response = chat_completion.choices[0].message.content
 
-    print("\nAI:", response)
+    print("AI:", response)
+
+    messages.append(
+        {
+            "role":"assitant",
+            "content":response
+        }
+    )
